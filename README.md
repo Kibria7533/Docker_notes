@@ -1,4 +1,6 @@
-# Docker_notes
+# Run docer container and run command inside it
+docker container run ubuntu cat /etc/0s-release
+
 
 # See how many images you have?
 
@@ -167,4 +169,109 @@ docker push name_of_image
 docker rm image name
 
 docker image prune(delete unused iamage)
+
+
+
+# Save a image 
+
+docker image save name> new_name.tar
+
+
+# Load from tar file
+docker image load < logstash.tar
+
+
+Diff between save and export is save take all layer all tag on the tar file but export dont take parent layers
+
+export make an image without volume in the new tar file
+
+
+#  We can persist data using two method like volumes or bind mount
+
+ docker volum ls
+
+# Enter to mysql
+
+docker container run -d --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=true mysql
+
+
+# Inspect mysql
+
+docker volum inspect mysql | less
+
+# In my local host
+ 
+ cd /var/lib/docker/id
+
+# Enter to mysql
+docker container exec -it mysql /bin/bash
+
+mysql
+create dabase example
+
+And after removing container if we attach it to a new container then example databse will be there
+
+# Create a new container with existing volum
+
+docker container run -it -v id:/var/lib/mysql mysql
+docker container run -d --name xyz -v abc:/var/lib/mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=true mysql
+And if abc volum will be created if not created
+
+and entering on that previous database will be seen there
+
+# List all volume
+
+docker volume ls
+
+
+# Create new volume
+docker volume create my_volume
+
+# Remove volume
+
+docker volume rm name_of_the_volum
+
+docker volume prune
+
+# Lets mount our host machine file folder using bind mount
+
+docker container run -it -v hostmachinepath:/tmp/test/ ubuntu:14.04  bash 
+
+we have to give full path of host maching and we can get that from bellow command
+
+# To get a file path
+pwd
+
+Or docker container run -it -v $(pwd) :/tmp/test/ ubuntu:14.04 bash
+
+Or docker container run -it --mount type=bind ,source=$(pwd), target=/tmp/test ubuntu:14.04 bash
+
+
+# Inspect network
+docker network inspect  bridge(Default network)
+
+
+# Create network driver bridge
+docker network create -d bridge test
+
+docker container run -it --network test ubuntu
+docker container run --network=test -itd -P nginx
+
+
+If we attach a custom network then its dns enabled automatically
+
+
+Here all files are isolated but the network are not isolated
+
+we cant create multipe host network
+
+# Container connect to multiple network ?
+ docker network connect test id
+
+# If we delete or disconnect ?
+docker network disconnect test id
+
+# Remove a network ?
+docker netwrok prune
+docker netwrok rm name
 
