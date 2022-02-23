@@ -1,3 +1,4 @@
+![](./dockernet.drawio.png)
 # Run docer container and run command inside it
 docker container run ubuntu cat /etc/0s-release
 
